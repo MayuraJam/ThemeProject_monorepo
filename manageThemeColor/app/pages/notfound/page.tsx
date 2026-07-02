@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import imageContent from '@/src/asset/image/homeless.png';
+import Image from 'next/image';
 
 export default function Notfound() {
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-5">
             <div className="w-40 h-40 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shadow-sm border border-zinc-100 dark:border-zinc-800">
-                <img
+                <Image
                     src={imageContent.src}
                     alt="Mock Thumbnail"
                     className="w-full h-full object-cover grayscale contrast-200"
