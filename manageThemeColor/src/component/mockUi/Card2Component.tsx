@@ -1,5 +1,6 @@
-import { Smile, ArrowUpRight, GitCompareArrows, MoveUpRight } from "lucide-react";
+import { Smile, MoveUpRight } from "lucide-react";
 import { Button } from "../atom/Button";
+import Image from "next/image";
 
 export default function Card2Component() {
     return (
@@ -18,7 +19,7 @@ export default function Card2Component() {
 
             {/* Image Area */}
             <div className="w-full h-[220px] rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 shadow-sm border border-zinc-100 dark:border-zinc-800">
-                <img
+                <Image
                     src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=800&auto=format&fit=crop"
                     alt="Mock Thumbnail"
                     className="w-full h-full object-cover"

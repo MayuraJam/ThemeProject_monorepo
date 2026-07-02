@@ -1,11 +1,12 @@
 "use client";
 
 import { Check, Clover, CopyIcon } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function UserCard() {
 
-    const [copyAccount, setCopyAccount] = useState<any>("");
+    const [copyAccount, setCopyAccount] = useState<React.ReactNode>("");
 
     const copyToClipBoard = async (textToCopy: string) => {
         try {
@@ -27,7 +28,7 @@ export default function UserCard() {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full border-2 border-[#85e783] overflow-hidden shadow-sm flex-shrink-0">
-                        <img
+                        <Image
                             src="https://i.pravatar.cc/150?img=11"
                             alt="Profile"
                             className="w-full h-full object-cover"

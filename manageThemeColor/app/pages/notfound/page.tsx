@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Frown } from 'lucide-react';
 import imageContent from '@/src/asset/image/homeless.png';
 
 export default function Notfound() {

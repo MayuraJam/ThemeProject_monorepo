@@ -1,5 +1,4 @@
 import { Header } from "@/src/component/atom/Header";
-import ButtonListComponent from "@/src/component/mockUi/ButtonListComponent";
 import Card1Component from "@/src/component/mockUi/Card1Component";
 import Card2Component from "@/src/component/mockUi/Card2Component";
 import ChartComponent from "@/src/component/mockUi/ChartComponent";
