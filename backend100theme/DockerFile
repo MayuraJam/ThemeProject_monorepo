@@ -1,0 +1,24 @@
+# Stage 1: Build
+# ดึง image ของ node มาใช้
+FROM node:alpine 
+
+#กำหนด directory ที่ใช้เก็บโค้ด
+WORKDIR /usr/app
+
+#คัดลอกไฟล์ package.json และ package-lock.json ไปยัง container
+COPY ./package*.json ./
+
+#ติดตั้ง package ที่ระบุในไฟล์ package.json
+RUN npm install
+
+# คัดลอกไฟล์ทั้งหมด ไปยัง container
+COPY . .
+
+# RUN npm run build
+
+# Stage 2: Production
+# FROM nginx:stable-alpine
+# Copy ไฟล์ที่ build เสร็จแล้วไปที่โฟลเดอร์ของ Nginx
+# COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 3050
+CMD ["npm","run","dev"]
