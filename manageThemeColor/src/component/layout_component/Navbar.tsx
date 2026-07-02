@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Palette } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -87,7 +88,7 @@ export default function Navbar() {
             className="flex items-center focus:outline-none cursor-pointer"
           >
             <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-zinc-200 dark:border-zinc-700">
-              <img
+              <Image
                 src="https://i.pravatar.cc/150?img=11"
                 alt="Profile"
                 className="w-full h-full object-cover"
@@ -99,7 +100,7 @@ export default function Navbar() {
             <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-lg py-1 z-50 overflow-hidden text-sm">
               <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800 flex flex-col justify-center items-center">
                 <div className="w-20 h-20 mb-3 rounded-full overflow-hidden border-6 border-green-400 dark:border-zinc-700">
-                  <img
+                  <Image
                     src="https://i.pravatar.cc/150?img=11"
                     alt="Profile"
                     className="w-full h-full object-cover"

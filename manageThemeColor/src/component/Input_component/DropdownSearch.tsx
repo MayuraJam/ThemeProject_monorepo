@@ -203,7 +203,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({
   items,
   placeholder,
   onSelect,
-  isDisable,
+  // isDisable,
 }) => {
   return (
     <DropdownSearch

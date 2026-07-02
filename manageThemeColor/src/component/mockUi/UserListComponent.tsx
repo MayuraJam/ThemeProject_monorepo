@@ -1,27 +1,10 @@
 "use client";
 
-import { ArrowUpRight, Check, Clover, CopyIcon } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpRight} from "lucide-react";
 import UserCard from "./UserCard";
 
 export default function UserListComponent() {
 
-    const [copyAccount, setCopyAccount] = useState<any>("");
-
-    const copyToClipBoard = async (textToCopy: string) => {
-        try {
-            await navigator.clipboard.writeText(textToCopy);
-            setCopyAccount(
-                <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "text-zinc-500" }}>คัดลอกสำเร็จ</span>
-                    <Check />
-                </span>,
-            );
-            setTimeout(() => setCopyAccount(""), 1000);
-        } catch (ex) {
-            setCopyAccount("ไม่สามารถทำการคัดลอกได้");
-        }
-    };
     return (
         <>
             <div className="flex justify-between items-center px-2">

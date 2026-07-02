@@ -1,5 +1,5 @@
 "use client"
-import { Smile, ThumbsUp, ThumbsDown, MessageCircle, Route, GitCompareArrows } from "lucide-react";
+import { Smile, ThumbsUp, ThumbsDown, MessageCircle, GitCompareArrows } from "lucide-react";
 import { Button } from "../atom/Button";
 import ExampleModal from "@/src/modal/exampleModal";
 import { useState } from "react";
