@@ -25,7 +25,7 @@ jobs:
           npm run lint
 
       - name: Build Docker Images
-        run: docker-compose build --no-cache
+        run: docker-compose build 
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
