@@ -1,5 +1,4 @@
 "use client"
-import { useState } from "react";
 import ModalComponent from "./ModalComponent";
 
 interface ModalProps {

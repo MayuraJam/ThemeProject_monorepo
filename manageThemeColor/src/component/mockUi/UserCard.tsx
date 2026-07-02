@@ -19,7 +19,8 @@ export default function UserCard() {
             );
             setTimeout(() => setCopyAccount(""), 1500);
         } catch (ex) {
-            setCopyAccount(<span className="text-[10px] text-red-500">ผิดพลาด</span>);
+            setCopyAccount(<span className="text-[10px] text-red-500">ผิดพลาด </span>);
+            console.error("เกิดข้อผิดผลาดของระบบ :",ex);
         }
     };
     
