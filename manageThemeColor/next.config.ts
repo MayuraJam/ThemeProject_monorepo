@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   output: 'standalone',
+  images: {
+    domains: ['i.pravatar.cc', 'images.unsplash.com', 'lftz25oez4aqbxpq.public.blob.vercel-storage.com'],
+  },
 };
 
 export default nextConfig;
