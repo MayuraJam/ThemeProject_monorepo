@@ -72,6 +72,12 @@ app.get("/api/google-login", async (req, res) => {
     );
 
     const payload = googleResponse.data;
+
+    //จุดที่ create user ลง ใน database ถ้า user ยังไม่มีใน database
+    //โดย username เอามาจากของ google login
+    //ตรวจสอบว่าคนนี้เคย login หรือยัง ให้ตรวจสอบจาก username or email ของ google login
+    //เพื่อจะได้สร้างประวัติให้กับ user
+
     res.json({ success: true, message: "Login successful", data: payload });
   } catch (error) {
     console.error(error);
