@@ -9,7 +9,9 @@ export default function Notfound() {
                 <Image
                     src={imageContent.src}
                     alt="Mock Thumbnail"
-                    className="w-full h-full object-cover grayscale contrast-200"
+                    className="object-cover grayscale contrast-200"
+                    height={300}
+                    width={300}
                 />
             </div>
             <h1 className="text-5xl font-bold text-zinc-700 dark:text-zinc-300">404</h1>

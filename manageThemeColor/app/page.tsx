@@ -7,6 +7,7 @@ import UploadFileComponent from "@/src/component/mockUi/UploadFileComponent";
 import UserListComponent from "@/src/component/mockUi/UserListComponent";
 import "./style.css"
 import GridComponent from "@/src/component/mockUi/GridComponent";
+import { TicketCardComponent } from "@/src/component/mockUi/TicketCardComponent";
 
 export default function Home() {
   return (
@@ -44,6 +45,8 @@ export default function Home() {
           <Card1Component />
           {/* Card 4: Upload File Area */}
           <UploadFileComponent />
+          {/* Card 4: Upload File Area */}
+          <TicketCardComponent />
         </div>
 
         {/* Column 2 */}
