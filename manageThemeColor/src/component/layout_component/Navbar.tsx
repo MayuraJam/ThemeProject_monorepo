@@ -91,7 +91,9 @@ export default function Navbar() {
               <Image
                 src="https://i.pravatar.cc/150?img=11"
                 alt="Profile"
-                className="w-full h-full object-cover"
+                className="object-cover"
+                width={150}
+                height={150}
               />
             </div>
           </button>
@@ -103,7 +105,9 @@ export default function Navbar() {
                   <Image
                     src="https://i.pravatar.cc/150?img=11"
                     alt="Profile"
-                    className="w-full h-full object-cover"
+                    className="object-cover"
+                    width={150}
+                    height={150}
                   />
                 </div>
                 <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี Mathew</p>

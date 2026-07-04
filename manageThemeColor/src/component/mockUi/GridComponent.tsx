@@ -73,7 +73,7 @@ export default function GridComponent() {
                     {listMenu.map((item) => (
                         <div key={item.id} className="min-w-[110px] lg:w-full flex-shrink-0 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors p-2">
                             <div className="w-10 lg:w-20 rounded-full relative">
-                                <Image src={item.icon} alt="icon" className='h-full w-full rounded-full mask grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 ease-in-out' />
+                                <Image src={item.icon} alt="icon" className='rounded-full mask grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 ease-in-out' width={100} height={100} />
                                 {/* <div className="absolute inset-0 bg-pink-300 mix-blend-color"></div> */}
                             </div>
                             <div className="text-sm text-zinc-400 dark:text-zinc-500">{item.name}</div>
