@@ -1,8 +1,11 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/src/component/layout_component/Navbar";
 import Sidebar from "@/src/component/layout_component/Sidebar";
+import AuthGuard from "./AuthGuard";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,25 +27,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  //หน้า layout ต้องเป็น server side
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      {/* body คือตัวนอกสุดของ app */}
+      {/* AuthGuard คือตัวเช็คสิทธิ์ ว่าเข้าสู่ระบบยัง ถ้ายังไม่เข้าจะเตะไปหน้า login */}
       <body className="flex flex-col min-h-screen bg-zinc-50 font-sans dark:bg-black">
-        <Navbar />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 w-full bg-zinc-100/50 dark:bg-zinc-950/50 overflow-y-auto h-[calc(100vh-4rem)] p-6 md:p-10">
-            <div className="max-w-6xl mx-auto flex flex-col gap-8">
-              {children}
-              <div className="flex justify-center mt-4 pb-4">
-                <p>Theme web | @2026</p>
-              </div>
-            </div>
-          </main>
-          {/* Footer Skeleton */}
-        </div>
+        {/* children คือหน้าเว็บที่ส่งเข้ามา */}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
       </body>
     </html>
   );

@@ -10,15 +10,15 @@ export interface ModalProps {
     children: ReactNode;
 }
 
-export default function ModalComponent({ 
-    isOpen, 
-    onClose, 
-    title = "Modal title", 
+export default function ModalComponent({
+    isOpen,
+    onClose,
+    title = "Modal title",
     subTitle,
     headerIcon,
-    children 
+    children
 }: ModalProps) {
-    
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
@@ -34,21 +34,21 @@ export default function ModalComponent({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity p-4">
             {/* Modal Container */}
-            <div 
+            <div
                 className="bg-white dark:bg-zinc-900 w-full max-w-md mx-auto rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200"
                 role="dialog"
                 aria-modal="true"
             >
-                {/* Modal Header (Lime Green Style) */}
-                <div className="bg-[#ccf643] dark:bg-[#badf3a] px-6 py-8 relative">
-                    <button 
+                {/* Modal Header*/}
+                <div className="bg-white dark:bg-[#badf3a] px-6 py-8 relative">
+                    <button
                         onClick={onClose}
                         className="absolute top-4 right-4 p-2 bg-black/10 hover:bg-black/20 dark:bg-black/20 dark:hover:bg-black/30 rounded-full transition-colors text-black focus:outline-none cursor-pointer"
                         aria-label="Close modal"
                     >
                         <X size={20} strokeWidth={2.5} />
                     </button>
-                    
+
                     <div className="flex items-center gap-4">
                         {headerIcon && (
                             <div className="w-14 h-14 bg-black/10 dark:bg-black/20 rounded-2xl flex items-center justify-center text-black flex-shrink-0">
@@ -65,7 +65,7 @@ export default function ModalComponent({
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="overflow-y-auto max-h-[70vh] p-6">
                     {children}
                 </div>

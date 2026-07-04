@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   output: 'standalone',
   images: {
-    domains: ['i.pravatar.cc', 'images.unsplash.com', 'lftz25oez4aqbxpq.public.blob.vercel-storage.com'],
+    domains: ['i.pravatar.cc',
+       'images.unsplash.com', 
+       'lftz25oez4aqbxpq.public.blob.vercel-storage.com','www.thiings.co'],
   },
 };
 
