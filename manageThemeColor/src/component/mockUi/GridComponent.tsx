@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import Card from "../component/Card";
 
 export default function GridComponent() {
 
@@ -55,32 +56,19 @@ export default function GridComponent() {
 
     return (
         <>
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm p-6 border border-zinc-200 dark:border-zinc-800">
-                <div className="flex justify-between items-center mb-4">
-                    <p className="font-semibold text-lg text-zinc-400 dark:text-zinc-500 uppercase tracking-wide">Menu</p>
-                    <div className="flex gap-2">
-                        <div className="flex gap-2">
-                            <div className='h-4 w-4 bg-green-200 dark:bg-zinc-700 rounded-full'></div>
-                            <div className='h-4 w-4 bg-yellow-200 dark:bg-zinc-700 rounded-full'></div>
-                            <div className='h-4 w-4 bg-red-200 dark:bg-zinc-700 rounded-full'></div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr className='border-zinc-200 dark:border-zinc-800 mb-6' />
-
+            <Card title='Menu'>
                 <div className="flex overflow-x-auto lg:grid lg:grid-cols-2 gap-4 lg:overflow-y-auto lg:overflow-x-hidden pb-2 lg:pb-0 pr-2 custom-scrollbar">
                     {listMenu.map((item) => (
                         <div key={item.id} className="min-w-[110px] lg:w-full flex-shrink-0 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors p-2">
                             <div className="w-10 lg:w-20 rounded-full relative">
                                 <Image src={item.icon} alt="icon" className='rounded-full mask grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 ease-in-out' width={100} height={100} />
-                                {/* <div className="absolute inset-0 bg-pink-300 mix-blend-color"></div> */}
                             </div>
                             <div className="text-sm text-zinc-400 dark:text-zinc-500">{item.name}</div>
                         </div>
                     ))}
                 </div>
-            </div>
+
+            </Card>
         </>
     )
 }
