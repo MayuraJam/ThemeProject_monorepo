@@ -32,3 +32,18 @@ jobs:
 
       - name: Deployment Success
         run: echo "Deployment Success!"
+
+  notify:
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ needs.build.result }}
+          title: "🚀 อัปเดตสถานะการทำงาน (CI/CD)"
+          description: "อัปเดตล่าสุดจาก Repository ของคุณ ตรวจสอบรายละเอียดได้เลยครับ!"
+          username: "Spoky Doggo"
+          

@@ -4,8 +4,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Palette } from 'lucide-react';
 import Image from 'next/image';
+import useAuthentication from '@/src/hooks/useAuth';
 
 export default function Navbar() {
+  const userData = useAuthentication((state) => state.userData);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const dropdownProfileRef = useRef<HTMLDivElement>(null);
@@ -24,6 +26,7 @@ export default function Navbar() {
         setIsThemeOpen(false);
       }
     }
+    
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("mousedown", handleClickOutsideTheme);
     return () => {
@@ -31,6 +34,11 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutsideTheme);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/pages/loginPage";
+  };
 
   return (
     <nav className="h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center px-4 justify-between w-full sticky top-0 z-20">
@@ -91,7 +99,9 @@ export default function Navbar() {
               <Image
                 src="https://i.pravatar.cc/150?img=11"
                 alt="Profile"
-                className="w-full h-full object-cover"
+                className="object-cover"
+                width={150}
+                height={150}
               />
             </div>
           </button>
@@ -103,11 +113,13 @@ export default function Navbar() {
                   <Image
                     src="https://i.pravatar.cc/150?img=11"
                     alt="Profile"
-                    className="w-full h-full object-cover"
+                    className="object-cover"
+                    width={150}
+                    height={150}
                   />
                 </div>
-                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี Mathew</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">Designer</p>
+                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี {userData?.given_name || "userName"}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">{userData?.email || "email"}</p>
               </div>
 
               <div className="py-1">
@@ -119,7 +131,7 @@ export default function Navbar() {
               <div className="border-t border-zinc-100 dark:border-zinc-800 py-1">
                 <button
                   className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
-                  onClick={() => console.log('Logout')}
+                  onClick={handleLogout}
                 >
                   Logout
                 </button>

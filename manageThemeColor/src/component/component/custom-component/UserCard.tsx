@@ -32,7 +32,9 @@ export default function UserCard() {
                         <Image
                             src="https://i.pravatar.cc/150?img=11"
                             alt="Profile"
-                            className="w-full h-full object-cover"
+                            className="object-cover"
+                            width={150}
+                            height={150}
                         />
                     </div>
                     <div className="flex flex-col">

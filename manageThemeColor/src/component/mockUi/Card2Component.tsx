@@ -22,7 +22,9 @@ export default function Card2Component() {
                 <Image
                     src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=800&auto=format&fit=crop"
                     alt="Mock Thumbnail"
-                    className="w-full h-full object-cover"
+                    className="object-cover"
+                    width={800}
+                    height={600}
                 />
             </div>
 

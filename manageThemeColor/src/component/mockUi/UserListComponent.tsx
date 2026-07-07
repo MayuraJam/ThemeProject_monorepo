@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUpRight} from "lucide-react";
-import UserCard from "./UserCard";
+import UserCard from "../component/custom-component/UserCard";
 
 export default function UserListComponent() {
 
