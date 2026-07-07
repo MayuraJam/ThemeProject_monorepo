@@ -1,5 +1,4 @@
 import Card from "../component/Card";
-import Ticket from "../component/custom-component/Ticket";
 import Ticket2 from "../component/custom-component/Ticket2";
 export const TicketCardComponent = () => (
     <>

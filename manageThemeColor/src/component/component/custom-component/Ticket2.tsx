@@ -1,6 +1,4 @@
-import React from 'react';
 import Image from 'next/image';
-import { Settings } from 'lucide-react';
 
 interface Ticket2Props {
   protocolNumber?: string | number;

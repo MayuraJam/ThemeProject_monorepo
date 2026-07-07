@@ -1,35 +1,30 @@
 import { create } from "zustand";
 import api from "../api/axios-instance";
+import { ErrorProps } from "../type/ErrorType";
 
 interface AuthState {
   isAuthenticated: boolean;
-  userData: any;
+  userData: Record<string, unknown>;
   authLoading: boolean;
   authMessage: string;
-  getMe: () => Promise<{ success: boolean; message?: string; data?: any; authMessage?: string }>;
+  getMe: () => Promise<{ success: boolean; message?: string; data?: Record<string, unknown>; authMessage?: string }>;
 }
 
 const useAuthentication = create<AuthState>((set) => ({
   isAuthenticated: false,
-  userData: null,
+  userData: {},
   authLoading: false,
   authMessage: "",
   getMe: async () => {
     set({ authLoading: true, authMessage: "" });
     try {
       const response = await api.get("/api/google-login");
-
-      // 🌟 ดักเช็คโครงสร้าง response ก่อนแกะ
-      console.log("1. ตรวจสอบก้อน response ดิบจาก Axios:", response);
-
-      // ป้องกันเคสลืมพิมพ์ .data หรือหลังบ้านพ่นโครงสร้างแปลก ๆ มา
       const responseData = response.data;
       if (!responseData) {
         throw new Error("หลังบ้านส่งของกลับมาเป็นค่าว่างเปล่า");
       }
 
       const { data, message, success } = responseData;
-      // console.log("2. ตรวจสอบ data ที่แกะออกมาแล้ว:", data);
 
       set({
         userData: data || null,
@@ -37,20 +32,18 @@ const useAuthentication = create<AuthState>((set) => ({
         authLoading: false,
         authMessage: message || "ดึงข้อมูลสำเร็จ",
       });
-      console.log("2. ตรวจสอบ data ที่แกะออกมาแล้ว:", data);
       return { success: success, message: message, data: data };
-    } catch (error : any) {
-      console.error("💥 getMe ระเบิดในท่อน Catch! สาเหตุจาก:", error.message);
-
-      // พังตรงไหนก็ต้องปิดสวิตช์โหลดดิ้ง และล้างค่าให้ปลอดภัย
+    } catch (error: unknown) {
+      const err = error as ErrorProps;
+      const errorMessage = err?.message || "เกิดข้อผิดพลาดที่ไม่รู้จัก";
       set({
-        userData: null,
+        userData: {},
         isAuthenticated: false,
         authLoading: false,
-        authMessage: error.message,
+        authMessage: errorMessage,
       });
 
-      return { success: false, authMessage: error.message };
+      return { success: false, authMessage: errorMessage };
     }
   },
 }));

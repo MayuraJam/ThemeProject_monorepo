@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/src/component/layout_component/Navbar";
-import Sidebar from "@/src/component/layout_component/Sidebar";
 import AuthGuard from "./AuthGuard";
 
 
@@ -27,8 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  //หน้า layout ต้องเป็น server side
   return (
     <html
       lang="en"

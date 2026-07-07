@@ -7,20 +7,20 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export interface ActionBtn<T = any> {
+export interface ActionBtn<T = Record<string, unknown>> {
   label: string;
   icon?: React.ReactNode;
   onClick: (row: T) => void;
   className?: string;
 }
 
-export interface Column<T = any> {
+export interface Column<T = Record<string, unknown>> {
   key: string;
   header: string;
   render?: (row: T) => React.ReactNode;
 }
 
-export interface TableProps<T = any> {
+export interface TableProps<T = Record<string, unknown>> {
   columns: Column<T>[];
   data: T[];
   haveActionBtn?: boolean;
@@ -33,7 +33,7 @@ export interface TableProps<T = any> {
 }
 
 // Internal component for the responsive action dropdown
-const ActionDropdown = ({ row, actions }: { row: any; actions: ActionBtn[] }) => {
+const ActionDropdown = <T,>({ row, actions }: { row: T; actions: ActionBtn<T>[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -82,7 +82,7 @@ const ActionDropdown = ({ row, actions }: { row: any; actions: ActionBtn[] }) =>
   );
 };
 
-export function Table<T = any>({
+export function Table<T = Record<string, unknown>>({
   columns,
   data,
   haveActionBtn = false,
@@ -127,7 +127,7 @@ export function Table<T = any>({
                 <tr key={rowIndex} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
                   {columns.map((col) => (
                     <td key={col.key} className="px-6 py-4">
-                      {col.render ? col.render(row) : (row as any)[col.key]}
+                      {col.render ? col.render(row) : (row as Record<string, unknown>)[col.key] as React.ReactNode}
                     </td>
                   ))}
                   {haveActionBtn && (
