@@ -23,8 +23,6 @@ function LoginContent() {
             console.log("Login result: ", result);
             
             if (!result.success) {
-                // ถ้า Backend ตรวจสอบไม่ผ่าน (Token ปลอม/หมดอายุ หรือเซิร์ฟเวอร์พัง)
-                // ต้องเคลียร์ Token ทิ้ง เพื่อไม่ให้ค้างในระบบ
                 localStorage.removeItem("googleAuthen");
                 localStorage.removeItem("loginStatus");
                 
@@ -58,7 +56,7 @@ function LoginContent() {
                 icon: "success",
                 title: "เข้าสู่ระบบสำเร็จ",
             });
-            // 3. ถ้าสำเร็จ ค่อยตั้งค่าสถานะว่าล็อกอินแล้วอย่างเป็นทางการ
+
             localStorage.setItem("loginStatus", "true");
             router.push("/");
         },

@@ -29,7 +29,7 @@ const useAuthentication = create<AuthState>((set) => ({
       }
 
       const { data, message, success } = responseData;
-      console.log("2. ตรวจสอบ data ที่แกะออกมาแล้ว:", data);
+      // console.log("2. ตรวจสอบ data ที่แกะออกมาแล้ว:", data);
 
       set({
         userData: data || null,
@@ -37,7 +37,7 @@ const useAuthentication = create<AuthState>((set) => ({
         authLoading: false,
         authMessage: message || "ดึงข้อมูลสำเร็จ",
       });
-
+      console.log("2. ตรวจสอบ data ที่แกะออกมาแล้ว:", data);
       return { success: success, message: message, data: data };
     } catch (error : any) {
       console.error("💥 getMe ระเบิดในท่อน Catch! สาเหตุจาก:", error.message);

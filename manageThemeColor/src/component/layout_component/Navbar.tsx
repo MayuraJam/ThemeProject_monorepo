@@ -4,8 +4,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Palette } from 'lucide-react';
 import Image from 'next/image';
+import useAuthentication from '@/src/hooks/useAuth';
 
 export default function Navbar() {
+  const userData = useAuthentication((state) => state.userData);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const dropdownProfileRef = useRef<HTMLDivElement>(null);
@@ -24,6 +26,7 @@ export default function Navbar() {
         setIsThemeOpen(false);
       }
     }
+    
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("mousedown", handleClickOutsideTheme);
     return () => {
@@ -115,8 +118,8 @@ export default function Navbar() {
                     height={150}
                   />
                 </div>
-                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี Mathew</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">Designer</p>
+                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี {userData?.given_name || "userName"}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">{userData?.email || "email"}</p>
               </div>
 
               <div className="py-1">

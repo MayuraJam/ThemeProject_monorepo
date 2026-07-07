@@ -4,33 +4,55 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Navbar from "@/src/component/layout_component/Navbar";
 import Sidebar from "@/src/component/layout_component/Sidebar";
+import useAuthentication from "@/src/hooks/useAuth";
+import Swal from "sweetalert2";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [isChecking, setIsChecking] = useState(true);
 
-  useEffect(() => {
-    // ข้อยกเว้น: ถ้าตอนนี้อยู่หน้า Login อยู่แล้ว ไม่ต้องเช็คซ้ำ ให้ผ่านไปเลย
-    if (pathname.includes("/pages/loginPage")) {
-      setIsChecking(false);
-      return;
-    }
+  // ดึง state และ function จาก Zustand
+  const getMe = useAuthentication((state) => state.getMe);
+  const userData = useAuthentication((state) => state.userData);
 
-    const isLogin = localStorage.getItem("loginStatus");
-    if (isLogin !== "true") {
-      router.push("/pages/loginPage"); // เตะไปหน้า Login จริงๆ (URL เปลี่ยน)
-    } else {
-      setIsChecking(false);
-    }
-  }, [router, pathname]);
+  useEffect(() => {
+    const checkAuth = async () => {
+      // ข้อยกเว้น: ถ้าตอนนี้อยู่หน้า Login อยู่แล้ว ไม่ต้องเช็คซ้ำ ให้ผ่านไปเลย
+      if (pathname.includes("/pages/loginPage")) {
+        setIsChecking(false);
+        return;
+      }
+
+      const isLogin = localStorage.getItem("loginStatus");
+      if (isLogin !== "true") {
+        router.push("/pages/loginPage"); // เตะไปหน้า Login จริงๆ (URL เปลี่ยน)
+      } else {
+        if (!userData) {
+          const result = await getMe();
+          if (!result.success) {
+            localStorage.removeItem("loginStatus");
+            router.push("/pages/loginPage");
+            return;
+          }
+        }
+        setIsChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, [router, pathname, getMe, userData]);
 
   if (isChecking) {
+
+
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-zinc-500 animate-pulse">กำลังตรวจสอบสิทธิ์...</p>
       </div>
     );
+
+
   }
 
   // ถ้าอยู่หน้า Login ไม่ต้องแสดง Navbar และ Sidebar
@@ -38,7 +60,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
- 
+
   return (
     <>
       <div>
