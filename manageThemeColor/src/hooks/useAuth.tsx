@@ -24,10 +24,12 @@ const useAuthentication = create<AuthState>((set) => ({
   },
   authLoading: false,
   authMessage: "",
+  //ดึงข้อมูลผู้ใช้งาน นำ assess_token ส่งกลับไปเพื่อดึงข้อมูลใน getMe
   getMe: async () => {
     set({ authLoading: true, authMessage: "" });
     try {
-      const response = await api.get("/api/google-login");
+      //ส่ง acessh token ผ่าน header
+      const response = await api.get("/api/authen/google-login");
       const responseData = response.data;
       if (!responseData) {
         throw new Error("หลังบ้านส่งของกลับมาเป็นค่าว่างเปล่า");
