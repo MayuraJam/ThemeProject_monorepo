@@ -2,10 +2,13 @@ const supabase = require("../config/supabase.js");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const axios = require("axios");
-//เข้าสู่ระบบด้วย Google
+const jwt = require('jsonwebtoken');
+const crypto = require("crypto");
+const tokenLimit = "1d"
+//เข้าสู่ระบบด้วย Google เปลี่ยนไปดึงจาก jwt
 async function signInWithGoogle(req) {
     try {
-        const authHeader = req;
+        const authHeader = req; //get google token
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return { message: "Invalid header", success: false };
         }
@@ -38,7 +41,7 @@ async function signInWithGoogle(req) {
         // 2. เงื่อนไข: ถ้าค้นหาไม่เจอ (length === 0) แปลว่า Login ครั้งแรก
         if (existingUser.length === 0) {
             console.log("First time Google Login. Creating new user...");
-            
+
             const { data: data1, error: error1 } = await supabase
                 .from("Master_User")
                 .insert({
@@ -62,7 +65,7 @@ async function signInWithGoogle(req) {
             const { data: data2, error: error2 } = await supabase
                 .from("UserRole")
                 .insert({
-                    user_id: data1[0].id, 
+                    user_id: data1[0].id,
                     role_id: 2,
                     created_at: new Date(),
                     created_by: "admin_m"
@@ -88,35 +91,87 @@ async function signInWithGoogle(req) {
             userData = existingUser[0];
         }
 
-        return { success: true, message: "Login successful", data: userData };
+        const jwtToken = jwt.sign(
+            {
+                userId: userData.id,
+                email: userData.email,
+                role: userData.Career_field,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: tokenLimit }
+        );
+
+        return { success: true, message: "Login successful", token:jwtToken };
     } catch (error) {
         console.error(error);
         return { message: "Invalid token", success: false, error: error.message };
     }
 }
+
+
+//get full profile from jwt
+
+
 //เข้าสู่ระบบด้วย email,password
 async function signInWithEmailAndPassword(email, password) {
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
-        });
-        if (error) throw error;
-        return data;
+        //ทำการเข้ารหัส password ด้วย sha256 
+        const hashPassword = crypto.createHash("sha256").update(password).digest("hex");
+        //ตรวจสอบใน master
+        const { data: data1, error: error1 } = await supabase
+            .from("Master_User")
+            .select("*")
+            .eq("email", email);
+
+        
+        if (error1) {
+            console.error("กรุณากรอกอีเมลให้ถูกต้อง", error1.message);
+            throw error1;
+        }
+
+        //ตรวจสอบว่า password ถูกต้องไหม
+        if(data1[0].password !== hashPassword){
+            return { success: false, message: "รหัสผ่านไม่ถูกต้อง" };
+        }
+
+        if(data1.length === 0){
+            return { success: false, message: "ไม่พบผู้ใช้งาน" };
+        }
+
+        const userData = data1[0];
+        //เข้ารหัส jwt
+        const jwtToken = jwt.sign(
+            {
+                userId: userData.id,
+                email: userData.email,
+                role: userData.Career_field,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: tokenLimit }
+        );
+
+        return { success: true, message: "เข้าสู่ระบบสำเร็จ", token:jwtToken };
+        // return data;
     } catch (error) {
         console.error("Error signing in with email and password:", error.message);
         throw error;
     }
 }
-//สมัครสมาชิกด้วย email,password
+//สมัครสมาชิกด้วย email,password มีการเข้ารหัส JWT และใส่่รายละเอียด user
 async function signUpWithEmailAndPassword(email, password) {
     try {
         let authUserId;
-
+        
+        //ตรวตสอบว่ามีในระบบไหม
+        const { data, error } = await supabase
+            .from("Master_User")
+            .select("*")
+            .eq("email", email);
+        if (error) throw error;
+        if (data.length > 0) return { message: "email นี้เคยลงทะเบียนแล้ว", success: false };
         // 1. ตรวจสอบว่าเป็น Mock User หรือไม่ (ดักโดเมน dummyjson.com หรืออื่นๆ)
         if (email.includes("dummyjson.com") || email.includes("@mock.com")) {
-            console.log("Mock User Detected: Bypassing Supabase Auth for", email);
-            const crypto = require("crypto");
+
             authUserId = crypto.randomUUID(); // สร้าง UUID ปลอมสำหรับ Mock Data
         } else {
             // สมัครสมาชิก Auth ตามปกติ
@@ -128,17 +183,11 @@ async function signUpWithEmailAndPassword(email, password) {
 
             authUserId = data.user.id;
 
-            const { data: data3, error: error3 } = await supabase
-                .from("Master_User")
-                .select("*")
-                .eq("supabase_UserId", authUserId);
-
-            if (error3) {
-                console.error("Get Master_User Error:", error3.message);
-                throw error3;
-            }
         }
 
+        //ทำการเข้ารหัส password ด้วย sha256 และค่า salt random 
+        // const salt = crypto.randomBytes(16).toString("hex");
+        const hashPassword = crypto.createHash("sha256").update(password).digest("hex");
 
         const { data: data1, error: error1 } = await supabase
             .from("Master_User")
@@ -151,7 +200,8 @@ async function signUpWithEmailAndPassword(email, password) {
                 status: 1,
                 created_at: new Date(),
                 updated_at: new Date(),
-                Career_field: "User"
+                Career_field: "User",
+                password : hashPassword
             })
             .select();
 
@@ -196,19 +246,50 @@ async function signUpWithEmailAndPassword(email, password) {
             console.error("Get Master_User Error:", error3.message);
             throw error3;
         }
+        
+        const userData = data3[0];
+        //เข้ารหัส jwt
+        const jwtToken = jwt.sign(
+            {
+                userId: userData.id,
+                email: userData.email,
+                role: userData.Career_field,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: tokenLimit }
+        );
 
-        return {
-            message: "สมัครสมาชิกสำเร็จ",
-            data: data3[0],
-        };
+        return { success: true, message: "สมัครสมาชิกสำเร็จ", token:jwtToken };
 
     } catch (error) {
         console.error("Error signing up with email and password:", error.message);
         throw error;
     }
 }
+
+async function GetMe(req) {
+    try {
+        const authHeader = req; //get google token
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return { message: "Invalid header", success: false };
+        }
+        const token = authHeader.split(" ")[1];
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const { data: data1, error: error1 } = await supabase
+            .from("Master_User")
+            .select("*")
+            .eq("id", decoded.userId);
+        if (error1) throw error1;
+        return { success: true, message: "Get profile successful", data: data1[0] };
+    } catch (error) {
+        console.error("Error getting profile:", error.message);
+        throw error;
+    }
+}
 module.exports = {
     signInWithGoogle,
     signInWithEmailAndPassword,
-    signUpWithEmailAndPassword
+    signUpWithEmailAndPassword,
+    GetMe
 };
