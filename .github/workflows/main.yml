@@ -36,14 +36,34 @@ jobs:
   notify:
     needs: [build]
     runs-on: ubuntu-latest
-    if: always()
+    # if: always()
     steps:
-      - name: Discord Notification
+      # - name: Discord Notification
+      #   uses: sarisia/actions-status-discord@v1
+      #   with:
+      #     webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      #     status: ${{ needs.build.result }}
+      #     title: "🚀 อัปเดตสถานะการทำงาน (CI/CD)"
+      #     description: "อัปเดตล่าสุดจาก Repository ของคุณ ตรวจสอบรายละเอียดได้เลยครับ!"
+      #     username: "Spoky Doggo"
+
+      - name: Success Alert
+        if: ${{ needs.build.result == 'success' }}
         uses: sarisia/actions-status-discord@v1
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          status: ${{ needs.build.result }}
           title: "🚀 อัปเดตสถานะการทำงาน (CI/CD)"
           description: "อัปเดตล่าสุดจาก Repository ของคุณ ตรวจสอบรายละเอียดได้เลยครับ!"
           username: "Spoky Doggo"
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "🎉 **Success!** เก่งมาก ยินดีด้วยนะ น้องรัก"
+
+      - name: Failure Alert
+        if: ${{ needs.build.result == 'failure' }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          title: "🚀 อัปเดตสถานะการทำงาน (CI/CD)"
+          description: "อัปเดตล่าสุดจาก Repository ของคุณ ตรวจสอบรายละเอียดได้เลยครับ!"
+          username: "Spoky Doggo"
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "⚠️ **Failure** ไม่เป็นไรนะ น้องรัก กอดๆ ลองใหม่อีกครั้งนะคนเก่งของพี่"
           

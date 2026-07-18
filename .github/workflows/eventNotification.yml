@@ -1,0 +1,17 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches: ["mayura"]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Alert
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
+          title: "🚀 อัปเดตสถานะ งานของน้อง"
+          description: "อัปเดตล่าสุดจาก Repository ของคุณ ตรวจสอบรายละเอียดได้เลยครับ!"
+          username: "หนุ่มแว่นสุดหล่อ"
