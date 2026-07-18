@@ -1,160 +1,128 @@
-const supabase = require("../config/supabase.js");
-const now = new Date();
+const themeService = require("../service/theme.service");
 
-async function getAllTheme() {
+async function getAllTheme(req, res) {
   try {
-    //ดึงข้อมูลจาก DB มาทั้งหมด เก็บในตัวแปร data
-    const { data, error } = await supabase.from("Master_theme").select("*");
-
-    if (error) {
-      console.error("Supabase Query Error:", error.message);
-      return null;
-    }
-
-    if (!data) return [];
-
-    return data.map((t) => ({
-      id: t.id,
-      created_at: t.created_at,
-      themeName: t.themeName,
-      color100: t.color100,
-      color75: t.color75,
-      color25: t.color25,
-      color20: t.color20,
-      colorTone: t.colorTone,
-    }));
+    const response = await themeService.getAllTheme();
+    res.json({
+      success: true,
+      message: "ดึงข้อมูลสำเร็จ",
+      data: response,
+    });
   } catch (error) {
-    console.error("ไม่สามารถดึงข้อมูลจาก Supabase ได้");
-    throw error;
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+      success: false,
+      error: error.message,
+    });
   }
 }
 
-async function getThemeById(id) {
+async function getThemeById(req, res) {
   try {
-    //ดึงข้อมูลจาก DB มาทั้งหมด เก็บในตัวแปร data
-    const { data, error } = await supabase
-      .from("Master_theme")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      console.error("Supabase Query Error:", error.message);
-      return null;
-    }
-
-    if (!data) return [];
-
-    return {
-      data: data,
-    };
+    const reqParam = req.params.id;
+    const response = await themeService.getThemeById(reqParam);
+    res.json({
+      success: true,
+      message: "ดึงข้อมูลสำเร็จ",
+      data: response,
+    });
   } catch (error) {
-    console.error("ไม่สามารถดึงข้อมูลจาก Supabase ได้");
-    throw error;
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+      success: false,
+      error: error.message,
+    });
   }
 }
 
-async function getAllThemeForDropdown() {
+async function getAllThemeForDropdown(req, res) {
   try {
-    //ดึงข้อมูลจาก DB มาทั้งหมด เก็บในตัวแปร data
-    const { data, error } = await supabase.from("Master_theme").select("*");
-
-    if (error) {
-      console.error("Supabase Query Error:", error.message);
-      return null;
-    }
-
-    if (!data) return [];
-
-    return data.map((t) => ({
-      value: t.id,
-      label: t.themeName,
-      color: t.color100,
-    }));
+    const response = await themeService.getAllThemeForDropdown();
+    res.json({
+      success: true,
+      message: "ดึงข้อมูลสำเร็จ",
+      data: response,
+    });
   } catch (error) {
-    console.error("ไม่สามารถดึงข้อมูลจาก Supabase ได้");
-    throw error;
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+      success: false,
+      error: error.message,
+    });
   }
 }
 
-async function insertNewTheme(
-  themeName,
-  color100,
-  color75,
-  color25,
-  color20,
-  colorTone,
-) {
+async function insertNewTheme(req, res) {
   try {
-    const { data, error } = await supabase
-      .from("Master_theme")
-      .insert({
-        created_at: new Date().toISOString(),
-        themeName: themeName,
-        color100: color100,
-        color75: color75,
-        color25: color25,
-        color20: color20,
-        colorTone: colorTone,
-      })
-      .select();
-
-    if (error) {
-      console.error("Supabase Query Error:", error.message);
-      return null;
-    }
-
-    return {
-      message: "เพิ่มธีมสีสำเร็จ",
-      data: data,
-    };
+    const response = await themeService.insertNewTheme(req.body);
+    res.json({
+      success: true,
+      message: "ดึงข้อมูลสำเร็จ",
+      data: response,
+    });
   } catch (error) {
-    console.error("ไม่สามารถ เพิ่มข้อมูลธีมสีใหม่ได้");
-    throw error;
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการเพิ่มข้อมูล",
+      success: false,
+      error: error.message,
+    });
   }
 }
 
-async function updateTheme(
-  id,
-  themeName,
-  color100,
-  color75,
-  color25,
-  color20,
-  colorTone,
-) {
+async function updateTheme(req, res) {
   try {
-    const { data, error } = await supabase
-      .from("Master_theme")
-      .update({
-        themeName: themeName,
-        color100: color100,
-        color75: color75,
-        color25: color25,
-        color20: color20,
-        colorTone: colorTone,
-      })
-      .eq("id", id)
-      .select();
+    const response = await themeService.updateTheme(req.body);
+    res.json({
+      success: true,
+      message: "อัปเดตข้อมูลสำเร็จ",
+      data: response,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการอัปเดตข้อมูล",
+      success: false,
+      error: error.message,
+    });
+  }
+}
 
-    if (error) {
-      console.error("Supabase Query Error:", error.message);
-      return null;
+async function addOrRemoveTheme(req, res) {
+  try {
+    const {themeId, userId, transection_type} = req.body;
+    const response = await themeService.addOrRemoveTheme(themeId, userId, transection_type);
+    if (response.success) {
+      res.json({
+        success: true,
+        message: response.message,
+        data: response.data,
+      });
+    } else {
+      res.json({
+        success: false,
+        message: response.message
+      });
     }
 
-    return {
-      data: data,
-    };
   } catch (error) {
-    console.error("ไม่สามารถ แก้ไขข้อมูลธีมสีใหม่ได้");
-    throw error;
+    console.error(error);
+    res.status(500).json({
+      message: "เกิดข้อผิดผลาดในการอัปเดตข้อมูล",
+      success: false,
+      error: error.message,
+    });
   }
 }
 
 module.exports = {
   getAllTheme,
-  insertNewTheme,
-  getAllThemeForDropdown,
-  updateTheme,
   getThemeById,
+  getAllThemeForDropdown,
+  insertNewTheme,
+  updateTheme,
+  addOrRemoveTheme
 };

@@ -7,6 +7,8 @@ const {
   getThemeById,
 } = require("./controller/theme.controller");
 const starSystemRoute = require("./router/starSystem.route");
+const authenRoute = require("./router/authen.route");
+const themeRoute = require("./router/theme.route");
 const cors = require("cors");
 const app = express();
 const swaggerUi = require("swagger-ui-express");
@@ -51,153 +53,155 @@ app.get("/index", (req, res) => {
 });
 
 //for google login
-app.get("/api/google-login", async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        message: "Authorization header missing or malformed",
-        success: false,
-      });
-    }
-    const token = authHeader.split(" ")[1];
+// app.get("/api/google-login", async (req, res) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//       return res.status(401).json({
+//         message: "Authorization header missing or malformed",
+//         success: false,
+//       });
+//     }
+//     const token = authHeader.split(" ")[1];
 
-    const googleResponse = await axios.get(
-      "https://www.googleapis.com/oauth2/v3/userinfo",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+//     const googleResponse = await axios.get(
+//       "https://www.googleapis.com/oauth2/v3/userinfo",
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       },
+//     );
 
-    const payload = googleResponse.data;
+//     const payload = googleResponse.data;
 
-    //จุดที่ create user ลง ใน database ถ้า user ยังไม่มีใน database
-    //โดย username เอามาจากของ google login
-    //ตรวจสอบว่าคนนี้เคย login หรือยัง ให้ตรวจสอบจาก username or email ของ google login
-    //เพื่อจะได้สร้างประวัติให้กับ user
+//     //จุดที่ create user ลง ใน database ถ้า user ยังไม่มีใน database
+//     //โดย username เอามาจากของ google login
+//     //ตรวจสอบว่าคนนี้เคย login หรือยัง ให้ตรวจสอบจาก username or email ของ google login
+//     //เพื่อจะได้สร้างประวัติให้กับ user
 
-    res.json({ success: true, message: "Login successful", data: payload });
-  } catch (error) {
-    console.error(error);
-    res.status(401).json({
-      message: "Invalid token",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+//     res.json({ success: true, message: "Login successful", data: payload });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(401).json({
+//       message: "Invalid token",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
 //get all theme
 
-app.get("/api/theme", async (req, res) => {
-  try {
-    const getTheme = await getAllTheme();
-    // console.log("response:",getTheme);
-    res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+// app.get("/api/theme", async (req, res) => {
+//   try {
+//     const getTheme = await getAllTheme();
+//     // console.log("response:",getTheme);
+//     res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
-app.get(`/api/theme/:id`, async (req, res) => {
-  const reqParam = req.params.id;
-  try {
-    const getTheme = await getThemeById(reqParam);
-    res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+// app.get(`/api/theme/:id`, async (req, res) => {
+//   const reqParam = req.params.id;
+//   try {
+//     const getTheme = await getThemeById(reqParam);
+//     res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
-app.get("/api/theme/ForDropdown", async (req, res) => {
-  try {
-    const getTheme = await getAllThemeForDropdown();
-    res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+// app.get("/api/theme/ForDropdown", async (req, res) => {
+//   try {
+//     const getTheme = await getAllThemeForDropdown();
+//     res.json({ success: true, message: "ดึงข้อมูลสำเร็จ", data: getTheme });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: "เกิดข้อผิดผลาดในการดึงข้อมูล",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
-app.post("/api/theme", async (req, res) => {
-  try {
-    const reqBody = req.body;
-    const { themeName, color100, color75, color25, color20, colorTone } =
-      reqBody;
-    console.log("insert data", reqBody);
-    const resData = await insertNewTheme(
-      themeName,
-      color100,
-      color75,
-      color25,
-      color20,
-      colorTone,
-    );
+// app.post("/api/theme", async (req, res) => {
+//   try {
+//     const reqBody = req.body;
+//     const { themeName, color100, color75, color25, color20, colorTone } =
+//       reqBody;
+//     console.log("insert data", reqBody);
+//     const resData = await insertNewTheme(
+//       themeName,
+//       color100,
+//       color75,
+//       color25,
+//       color20,
+//       colorTone,
+//     );
 
-    res.status(200).json({
-      message: "เพิ่มข้อมูลสำเร็จ",
-      success: true,
-      data: resData,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "เกิดข้อผิดผลาดในการจัดการข้อมูล",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+//     res.status(200).json({
+//       message: "เพิ่มข้อมูลสำเร็จ",
+//       success: true,
+//       data: resData,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: "เกิดข้อผิดผลาดในการจัดการข้อมูล",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
-app.put(`/api/theme/:id`, async (req, res) => {
-  const reqParam = req.params.id;
-  try {
-    const reqBody = req.body;
-    const { themeName, color100, color75, color25, color20, colorTone } =
-      reqBody;
-    console.log("insert data", reqBody);
-    const resData = await updateTheme(
-      reqParam,
-      themeName,
-      color100,
-      color75,
-      color25,
-      color20,
-      colorTone,
-    );
+// app.put(`/api/theme/:id`, async (req, res) => {
+//   const reqParam = req.params.id;
+//   try {
+//     const reqBody = req.body;
+//     const { themeName, color100, color75, color25, color20, colorTone } =
+//       reqBody;
+//     console.log("insert data", reqBody);
+//     const resData = await updateTheme(
+//       reqParam,
+//       themeName,
+//       color100,
+//       color75,
+//       color25,
+//       color20,
+//       colorTone,
+//     );
 
-    res.status(200).json({
-      message: "แก้ไขข้อมูลสำเร็จ",
-      success: true,
-      data: resData,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "เกิดข้อผิดผลาดในการจัดการข้อมูล",
-      success: false,
-      error: error.message,
-    });
-  }
-});
+//     res.status(200).json({
+//       message: "แก้ไขข้อมูลสำเร็จ",
+//       success: true,
+//       data: resData,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: "เกิดข้อผิดผลาดในการจัดการข้อมูล",
+//       success: false,
+//       error: error.message,
+//     });
+//   }
+// });
 
 app.use("/api/star-system", starSystemRoute);
+app.use("/api/authen", authenRoute);
+app.use("/api/theme", themeRoute);
 
 app.listen(port, () => {
   console.log("server is running on port : ", port);
