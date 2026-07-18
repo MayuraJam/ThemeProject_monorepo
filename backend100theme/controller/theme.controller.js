@@ -1,7 +1,7 @@
 const themeService = require("../service/theme.service");
-
 async function getAllTheme(req, res) {
   try {
+    console.log("[DEBUG]getAllTheme controller called");
     const response = await themeService.getAllTheme();
     res.json({
       success: true,

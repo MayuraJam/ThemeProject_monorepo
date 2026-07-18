@@ -2,16 +2,24 @@ const supabase = require("../config/supabase.js");
 
 async function getAllTheme() {
     try {
+        console.log("[DEBUG] getAllTheme() called");
         //ดึงข้อมูลจาก DB มาทั้งหมด เก็บในตัวแปร data
         const { data, error } = await supabase.from("Master_theme").select("*");
+
+        console.log("[DEBUG] Supabase Response Error:", error);
+        console.log("[DEBUG] Supabase Response Data:", data);
 
         if (error) {
             console.error("Supabase Query Error:", error.message);
             return null;
         }
 
-        if (!data) return [];
-
+        if (!data) {
+            console.log("[DEBUG] No data returned from Supabase (null/undefined)");
+            return [];
+        }
+        
+        console.log(`[DEBUG] Mapping ${data.length} records`);
         return data.map((t) => ({
             id: t.id,
             created_at: t.created_at,
@@ -28,6 +36,7 @@ async function getAllTheme() {
         }));
     } catch (error) {
         console.error("ไม่สามารถดึงข้อมูลจาก Supabase ได้");
+        console.error("[DEBUG] Exception in getAllTheme:", error);
         throw error;
     }
 }

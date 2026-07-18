@@ -22,6 +22,7 @@ require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const port = 3050;
 
 //install swagger
@@ -203,6 +204,9 @@ app.use("/api/star-system", starSystemRoute);
 app.use("/api/authen", authenRoute);
 app.use("/api/theme", themeRoute);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log("server is running on port : ", port);
 });
+server.on('close', () => console.log('Server closed'));
+server.on('error', (err) => console.error('Server error:', err));
+process.on('exit', (code) => console.log(`Process exiting with code: ${code}`));
