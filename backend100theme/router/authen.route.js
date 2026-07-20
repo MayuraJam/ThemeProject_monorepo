@@ -7,7 +7,7 @@ const {
     GetMe
 } = require("../controller/authentication.controller");
 
-router.get("/google-login", signInWithGoogle);
+router.post("/google-login", signInWithGoogle);
 router.post("/signInWithEmailAndPassword", signInWithEmailAndPassword);
 router.post("/signUpWithEmailAndPassword", signUpWithEmailAndPassword);
 router.get("/get-me", GetMe);

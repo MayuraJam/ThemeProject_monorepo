@@ -8,11 +8,7 @@ const tokenLimit = "1d"
 //เข้าสู่ระบบด้วย Google เปลี่ยนไปดึงจาก jwt
 async function signInWithGoogle(req) {
     try {
-        const authHeader = req; //get google token
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return { message: "Invalid header", success: false };
-        }
-        const token = authHeader.split(" ")[1];
+        const token = req; //get google token
 
         const googleResponse = await axios.get(
             "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -53,7 +49,7 @@ async function signInWithGoogle(req) {
                     status: 1,
                     created_at: new Date(),
                     updated_at: new Date(),
-                    Career_field: "User"
+                    Career_field: "User",
                 })
                 .select();
 
@@ -66,7 +62,7 @@ async function signInWithGoogle(req) {
                 .from("UserRole")
                 .insert({
                     user_id: data1[0].id,
-                    role_id: 2,
+                    role_id: 1,
                     created_at: new Date(),
                     created_by: "admin_m"
                 })
@@ -101,7 +97,7 @@ async function signInWithGoogle(req) {
             { expiresIn: tokenLimit }
         );
 
-        return { success: true, message: "Login successful", token:jwtToken };
+        return { success: true, message: "Login successful", token: jwtToken };
     } catch (error) {
         console.error(error);
         return { message: "Invalid token", success: false, error: error.message };
@@ -123,18 +119,18 @@ async function signInWithEmailAndPassword(email, password) {
             .select("*")
             .eq("email", email);
 
-        
+
         if (error1) {
             console.error("กรุณากรอกอีเมลให้ถูกต้อง", error1.message);
             throw error1;
         }
 
         //ตรวจสอบว่า password ถูกต้องไหม
-        if(data1[0].password !== hashPassword){
+        if (data1[0].password !== hashPassword) {
             return { success: false, message: "รหัสผ่านไม่ถูกต้อง" };
         }
 
-        if(data1.length === 0){
+        if (data1.length === 0) {
             return { success: false, message: "ไม่พบผู้ใช้งาน" };
         }
 
@@ -150,7 +146,7 @@ async function signInWithEmailAndPassword(email, password) {
             { expiresIn: tokenLimit }
         );
 
-        return { success: true, message: "เข้าสู่ระบบสำเร็จ", token:jwtToken };
+        return { success: true, message: "เข้าสู่ระบบสำเร็จ", token: jwtToken };
         // return data;
     } catch (error) {
         console.error("Error signing in with email and password:", error.message);
@@ -161,7 +157,7 @@ async function signInWithEmailAndPassword(email, password) {
 async function signUpWithEmailAndPassword(email, password) {
     try {
         let authUserId;
-        
+
         //ตรวตสอบว่ามีในระบบไหม
         const { data, error } = await supabase
             .from("Master_User")
@@ -169,10 +165,8 @@ async function signUpWithEmailAndPassword(email, password) {
             .eq("email", email);
         if (error) throw error;
         if (data.length > 0) return { message: "email นี้เคยลงทะเบียนแล้ว", success: false };
-        // 1. ตรวจสอบว่าเป็น Mock User หรือไม่ (ดักโดเมน dummyjson.com หรืออื่นๆ)
-        if (email.includes("dummyjson.com") || email.includes("@mock.com")) {
-
-            authUserId = crypto.randomUUID(); // สร้าง UUID ปลอมสำหรับ Mock Data
+        if (email.includes("dummyjson.com") || email.includes("@mock.com") || email.includes("@example.com")) {
+            authUserId = crypto.randomUUID();
         } else {
             // สมัครสมาชิก Auth ตามปกติ
             const { data, error } = await supabase.auth.signUp({
@@ -201,7 +195,7 @@ async function signUpWithEmailAndPassword(email, password) {
                 created_at: new Date(),
                 updated_at: new Date(),
                 Career_field: "User",
-                password : hashPassword
+                password: hashPassword
             })
             .select();
 
@@ -217,7 +211,7 @@ async function signUpWithEmailAndPassword(email, password) {
             .from("UserRole")
             .insert({
                 user_id: data1[0].id, // .select() จะคืนค่ามาเป็น Array ต้องชี้ไปที่ index 0
-                role_id: 2,
+                role_id: 1,
                 created_at: new Date(),
                 created_by: "admin_m"
             })
@@ -246,7 +240,7 @@ async function signUpWithEmailAndPassword(email, password) {
             console.error("Get Master_User Error:", error3.message);
             throw error3;
         }
-        
+
         const userData = data3[0];
         //เข้ารหัส jwt
         const jwtToken = jwt.sign(
@@ -259,7 +253,7 @@ async function signUpWithEmailAndPassword(email, password) {
             { expiresIn: tokenLimit }
         );
 
-        return { success: true, message: "สมัครสมาชิกสำเร็จ", token:jwtToken };
+        return { success: true, message: "สมัครสมาชิกสำเร็จ", token: jwtToken };
 
     } catch (error) {
         console.error("Error signing up with email and password:", error.message);
@@ -278,7 +272,31 @@ async function GetMe(req) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const { data: data1, error: error1 } = await supabase
             .from("Master_User")
-            .select("*")
+            .select(`
+            id,
+            supabase_UserId,
+            email,
+            userName,
+            firstname,
+            lastname,
+            status,
+            created_at,
+            updated_at,
+            Career_field,
+            User_ImageFile(
+             FilePath   
+            ),
+            UserRole(
+               Master_Role(
+                RolePermission(
+                 Master_Permission(
+                   PermissionName
+                  )                   
+                )
+               )
+              )
+             )
+            `)
             .eq("id", decoded.userId);
         if (error1) throw error1;
         return { success: true, message: "Get profile successful", data: data1[0] };

@@ -4,7 +4,7 @@ const authenticationService = require("../service/authentication.service.js");
 
 async function signInWithGoogle(req, res) {
     try {
-        const response = await authenticationService.signInWithGoogle(req.headers.authorization);
+        const response = await authenticationService.signInWithGoogle(req.body.token);
         res.json({
             success: response.success,
             message: response.message,
