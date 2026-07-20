@@ -4,7 +4,7 @@ services:
       context: ./backend100theme
       dockerfile: DockerFile
     ports:
-      - "3050:3050" # แมปพอร์ต 3001 บนเครื่อง host กับ 3000 ใน container ของ backend
+      - "3051:3050" # แมปพอร์ต 3001 บนเครื่อง host กับ 3000 ใน container ของ backend
     restart: always
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
@@ -15,7 +15,7 @@ services:
       context: ./manageThemeColor
       dockerfile: Dockerfile
     ports:
-      - "3000:3000" # แมปพอร์ต 3000 บนเครื่อง host กับ 3000 ใน container ของ frontend
+      - "3001:3000" # แมปพอร์ต 3000 บนเครื่อง host กับ 3000 ใน container ของ frontend
     depends_on:
       - backend
     restart: always
