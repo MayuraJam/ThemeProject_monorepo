@@ -26,7 +26,7 @@ export default function Navbar() {
         setIsThemeOpen(false);
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("mousedown", handleClickOutsideTheme);
     return () => {
@@ -42,8 +42,13 @@ export default function Navbar() {
 
   return (
     <nav className="h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center px-4 justify-between w-full sticky top-0 z-20">
-      <div className="font-bold text-xl text-black dark:text-white ml-10 md:ml-0 me-5">
-        Theme web
+      <div className="flex gap-2">
+        <div className='h-4 w-4 bg-green-200 dark:bg-zinc-700 rounded-full'></div>
+        <div className='h-4 w-4 bg-yellow-200 dark:bg-zinc-700 rounded-full'></div>
+        <div className='h-4 w-4 bg-red-200 dark:bg-zinc-700 rounded-full'></div>
+      </div>
+      <div className="font-bold text-xl text-black dark:text-white ml-10 md:ml-0 me-5 playpen-sans-hebrew">
+        Theme playground
       </div>
       <div className="flex items-center gap-4">
         {/* Mock Action Icons */}
@@ -118,7 +123,7 @@ export default function Navbar() {
                     height={150}
                   />
                 </div>
-                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี {userData?.given_name || "userName"}</p>
+                <p className="text-lg font-semibold text-zinc-900 dark:text-white text-center">สวัสดี {userData?.userName || "userName"}</p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">{userData?.email || "email"}</p>
               </div>
 

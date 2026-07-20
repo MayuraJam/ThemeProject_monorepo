@@ -9,9 +9,11 @@ const api = axios.create({
 
 //ในส่วนที่อาจจะมีการส่ง token จาก localstorage หลังจาก logib มาแนบไว้กับ header ในส่วนนี้
 api.interceptors.request.use((config)=>{
-    const googleAuthen = localStorage.getItem("googleAuthen");
-    const token = googleAuthen ? JSON.parse(googleAuthen).access_token : null;
-    if(token) config.headers.Authorization = `Bearer ${token}`;
+    // const googleAuthen = localStorage.getItem("googleAuthen");
+    const authToken = localStorage.getItem("auth-token");
+
+    // const token = googleAuthen ? JSON.parse(googleAuthen).access_token : null;
+    if(authToken) config.headers.Authorization = `Bearer ${authToken}`;
     return config;
 })
  

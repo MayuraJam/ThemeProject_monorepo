@@ -27,6 +27,48 @@ export default function Sidebar() {
     }
   };
 
+  interface SidebarProp {
+    name: string;
+    path: string;
+    icon: React.ReactNode;
+    permission?: string;
+  }
+
+  const menuSidebar: SidebarProp[] = [
+    {
+      name: "Mock UI",
+      path: "/",
+      icon: <Leaf />,
+      permission: ""
+    },
+    {
+      //admin สร้างและจัดการ
+      name: "Manage Theme list",
+      path: "/pages/manageThemeList",
+      icon: <Command />,
+      permission: ""
+    },
+    {
+      name: "Theme list All",
+      path: "/pages/themeList",
+      icon: <Database />,
+      permission: ""
+    },
+    {
+      name: "Your Theme list",
+      path: "/pages/notfound",
+      icon: <Trophy />,
+      permission: ""
+    },
+    {
+      //ลูกค้าสร้างและจัดการ
+      name: "Create your Theme",
+      path: "/pages/notfound",
+      icon: <Sparkle />,
+      permission: ""
+    },
+  ]
+
   return (
     <>
       {/* Mobile Hamburger Button */}
@@ -81,52 +123,23 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex flex-col gap-2 p-2 mt-2">
-          <Link
-            href="/"
-            className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === '/' ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Mock UI"
-            onClick={closeOnMobile}
-          >
-            <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Leaf /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Mock UI</span>
-          </Link>
-          <Link
-            href="/pages/manageThemeList"
-            className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === '/pages/manageThemeList' ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Manage Theme list"
-            onClick={closeOnMobile}
-          >
-            <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Command /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Manage Theme list</span>
-          </Link>
-          <Link
-            href="/pages/themeList"
-            className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === '/pages/themeList' ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Theme list All"
-            onClick={closeOnMobile}
-          >
-            <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Database /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Theme list All</span>
-          </Link>
-          <Link
-            href="/pages/notfound"
-            className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === '/pages/notfound' ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Your Theme list"
-            onClick={closeOnMobile}
-          >
-            <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Trophy /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Your Theme list</span>
-          </Link>
-          <Link
-            href="/pages/notfound"
-            className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === '/pages/notfound' ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Create your Theme"
-            onClick={closeOnMobile}
-          >
-            <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Sparkle /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Create your Theme</span>
-          </Link>
 
+          {
+            menuSidebar.map((item, index) => {
+              return (
+                <Link
+                  key={index}
+                  href={item.path}
+                  className={`flex items-center gap-3 p-2 rounded transition-colors ${pathname === item.path ? 'bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
+                  title={item.name}
+                  onClick={closeOnMobile}
+                >
+                  <span className="text-xl flex-shrink-0 flex items-center justify-center w-6">{item.icon}</span>
+                  <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''} playpen-sans-hebrew`}>{item.name}</span>
+                </Link>
+              )
+            })
+          }
           <hr className='border-zinc-200 dark:border-zinc-800' />
           <Link
             href="/pages/setting"
@@ -135,7 +148,7 @@ export default function Sidebar() {
             onClick={closeOnMobile}
           >
             <span className="text-xl flex-shrink-0 flex items-center justify-center w-6"><Settings /></span>
-            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''}`}>Settings</span>
+            <span className={`whitespace-nowrap font-medium ${!isOpen ? 'md:hidden' : ''} playpen-sans-hebrew`}>Settings</span>
           </Link>
         </nav>
       </aside>

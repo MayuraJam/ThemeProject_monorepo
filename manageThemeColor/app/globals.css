@@ -47,3 +47,10 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+.playpen-sans-hebrew {
+  font-family: "Playpen Sans Hebrew", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
